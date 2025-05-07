@@ -1,4 +1,4 @@
-name: Transora
+name: transora
 description: "transforms audio recordings into interactive transcripts"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
