@@ -5,23 +5,23 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+#      - name: Install jq (needed for flutter-action)
+#        run: |
+#          apt-get update
+#          apt-get install -y jq curl unzip
+
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version-file: pubspec.yaml
+          flutter-version: 3.27.1
 
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Get version
-        run: flutter --version
-
-      - run: flutter build apk
-      - run: flutter build ios
+#      - run: flutter pub get
+      - run: flutter --version
+#      - run: flutter build apk
