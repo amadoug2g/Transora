@@ -18,7 +18,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("Transora"),
+        title: const Text("Transora"),
       ),
       body: ListView(
         children: items
@@ -48,7 +48,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
           });
           debugPrint("new item added");
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

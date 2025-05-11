@@ -9,7 +9,7 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: "/",
-      builder: (context, state) => LibraryScreen(),
+      builder: (context, state) => const LibraryScreen(),
       routes: [
         GoRoute(
           path: "details/:title",
@@ -19,7 +19,7 @@ final _router = GoRouter(
               title: state.pathParameters['title'],
             );
           },
-        )
+        ),
       ],
     ),
   ],
