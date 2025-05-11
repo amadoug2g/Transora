@@ -1,4 +1,4 @@
-# transora
+# Transora
 
 transforms audio recordings into interactive transcripts
 
