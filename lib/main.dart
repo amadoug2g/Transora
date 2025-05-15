@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:transora/src/audio_library/audio_detail_screen.dart';
-import 'package:transora/src/audio_library/library_screen.dart';
+import 'package:transora/src/features/audio_library/audio_file.dart';
+import 'package:transora/src/features/audio_library/library_screen.dart';
+import 'package:transora/src/features/audio_player/audio_detail_screen.dart';
 
 void main() => runApp(const Transora());
 
@@ -12,11 +13,11 @@ final _router = GoRouter(
       builder: (context, state) => const LibraryScreen(),
       routes: [
         GoRoute(
-          path: "details/:title",
-          name: "details",
+          path: "details",
           builder: (context, state) {
+            final audio = state.extra! as AudioFile;
             return AudioDetailScreen(
-              title: state.pathParameters['title'],
+              audioFile: audio,
             );
           },
         ),
