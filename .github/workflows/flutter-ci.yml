@@ -27,6 +27,12 @@ jobs:
       - name: Run tests
         run: flutter test
 
+      - name: Set up Java for macOS
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Build APK
         run: flutter build apk --release
 
