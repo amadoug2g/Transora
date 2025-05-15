@@ -10,7 +10,7 @@ void main() {
     'importedAt': DateTime.utc(1954, 4, 1).toIso8601String(),
   };
 
-  test("AudioFile mapping check", () {
+  test("Mapping verification", () {
     final audioFile = AudioFile.fromMap(audioMap);
 
     final map = audioFile.toMap();
@@ -22,7 +22,7 @@ void main() {
     expect(AudioFile.fromMap(map).importedAt, audioFile.importedAt);
   });
 
-  test("AudioFile date formatting", () {
+  test("Date formatting", () {
     final audioFile = AudioFile.fromMap(audioMap);
 
     final date = audioFile.formattedDate();

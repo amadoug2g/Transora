@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:path/path.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
 class DatabaseHelper {
@@ -26,7 +25,7 @@ class DatabaseHelper {
     }
 
     if (_db != null) return _db!;
-    final path = join(await getDatabasesPath(), _dbName);
+    final path = '${await getDatabasesPath()}/$_dbName';
     _db = await openDatabase(
       path,
       password: key,
