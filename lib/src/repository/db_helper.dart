@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// ignore: depend_on_referenced_packages path not referenced
+import 'package:path/path.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
 class DatabaseHelper {
@@ -26,10 +27,7 @@ class DatabaseHelper {
     }
 
     if (_db != null) return _db!;
-
-    final dbPath = await getDatabasesPath();
-    final path = '$dbPath${Platform.pathSeparator}audio_files.db';
-
+    final path = join(await getDatabasesPath(), _dbName);
     _db = await openDatabase(
       path,
       password: key,
