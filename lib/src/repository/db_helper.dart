@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -25,7 +26,10 @@ class DatabaseHelper {
     }
 
     if (_db != null) return _db!;
-    final path = '${await getDatabasesPath()}/$_dbName';
+
+    final dbPath = await getDatabasesPath();
+    final path = '$dbPath${Platform.pathSeparator}audio_files.db';
+
     _db = await openDatabase(
       path,
       password: key,
