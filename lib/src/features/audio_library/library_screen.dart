@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:transora/src/features/audio_library/audio_file.dart';
 import 'package:transora/src/repository/audio_file_dao.dart';
-import 'package:transora/src/utils/ui_library/audio_cardview.dart';
+import 'package:transora/src/utils/ui_library/audio_library/audio_cardview.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
@@ -45,7 +45,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
     final destPath = '${appDir.path}/$unique';
 
     try {
-      await File(srcPath).copy(destPath);
+      final bytes = result.files.single.bytes;
+      if (bytes != null) {
+        final file = File(destPath);
+        await file.writeAsBytes(bytes);
+      } else {
+        await File(srcPath).copy(destPath);
+      }
 
       final audio = AudioFile(
         title: fileName,
@@ -54,14 +60,16 @@ class _LibraryScreenState extends State<LibraryScreen> {
       await _dao.insert(audio);
     } on Exception catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('An error occurred: $e')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('An error occurred: $e')));
     }
 
     setState(() {
       _audioFiles = _dao.getAll();
     });
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('New File Added')));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('New File Added')));
   }
 
   @override
@@ -88,7 +96,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
             itemCount: audioFiles.length,
             itemBuilder: (context, index) {
               final audio = audioFiles[index];
-              return AudioCardView(audio: audio);
+              return AudioCardView(
+                audio: audio,
+                destination: "details",
+              );
             },
           );
         },
