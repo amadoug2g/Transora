@@ -17,9 +17,13 @@ class AudioCardView extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(audio.title),
-        subtitle: Text(audio.formattedDate()),
+        subtitle: Row(
+          children: [
+            Text(audio.formattedDate()),
+            Text(format.formattedDate()),
+          ],
+        ),
         leading: const Icon(Icons.music_note_rounded),
-        trailing: const Icon(Icons.keyboard_arrow_right),
         onTap: () => context.goNamed(
           destination,
           extra: audio,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:transora/src/utils/extension.dart';
 
 class PlaybackSlider extends StatefulWidget {
   const PlaybackSlider({
@@ -18,6 +19,20 @@ class PlaybackSlider extends StatefulWidget {
 }
 
 class _PlaybackSliderState extends State<PlaybackSlider> {
+  bool _isSeeking = false;
+  double _sliderValue = 0;
+
+  @override
+  void didUpdateWidget(covariant PlaybackSlider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (!_isSeeking) {
+      _sliderValue = widget.position.inMilliseconds
+          .clamp(0, widget.duration.inMilliseconds)
+          .toDouble();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,28 +42,27 @@ class _PlaybackSliderState extends State<PlaybackSlider> {
           Slider(
             min: 0,
             max: widget.duration.inMilliseconds.toDouble(),
-            value: widget.position.inMilliseconds
-                .clamp(0, widget.duration.inMilliseconds)
-                .toDouble(),
-            onChanged: (v) =>
-                widget.player.seek(Duration(milliseconds: v.round())),
+            value: _sliderValue,
+            onChanged: (v) {
+              setState(() {
+                _isSeeking = true;
+                _sliderValue = v;
+              });
+            },
+            onChangeEnd: (v) {
+              widget.player.seek(Duration(milliseconds: v.round()));
+              setState(() => _isSeeking = false);
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(_format(widget.position)),
-              Text(_format(widget.duration)),
+              Text(format(Duration(milliseconds: _sliderValue.round()))),
+              Text(format(widget.duration)),
             ],
           ),
         ],
       ),
     );
-  }
-
-  String _format(Duration d) {
-    final two = (int n) => n.toString().padLeft(2, '0');
-    final m = two(d.inMinutes.remainder(60));
-    final s = two(d.inSeconds.remainder(60));
-    return '$m:$s';
   }
 }
