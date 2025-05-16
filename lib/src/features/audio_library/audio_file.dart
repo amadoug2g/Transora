@@ -38,6 +38,9 @@ class AudioFile {
     final d = dt.day.toString().padLeft(2, '0');
     final m = dt.month.toString().padLeft(2, '0');
     final y = dt.year;
-    return "$d/$m/$y";
+    final h = dt.hour;
+    final mn = dt.minute;
+
+    return "$d/$m/$y — $h:$mn";
   }
 }

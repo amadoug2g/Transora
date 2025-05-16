@@ -14,12 +14,16 @@ class AudioCardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(audio.title),
-      subtitle: Text(audio.formattedDate()),
-      onTap: () => context.goNamed(
-        destination,
-        extra: audio,
+    return Card(
+      child: ListTile(
+        title: Text(audio.title),
+        subtitle: Text(audio.formattedDate()),
+        leading: const Icon(Icons.music_note_rounded),
+        trailing: const Icon(Icons.keyboard_arrow_right),
+        onTap: () => context.goNamed(
+          destination,
+          extra: audio,
+        ),
       ),
     );
   }

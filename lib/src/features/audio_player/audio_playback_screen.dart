@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:transora/src/features/audio_library/audio_file.dart';
+import 'package:transora/src/repository/db_helper.dart';
 import 'package:transora/src/utils/ui_library/audio_playback/playback_controls.dart';
 import 'package:transora/src/utils/ui_library/audio_playback/playback_slider.dart';
 import 'package:transora/src/utils/ui_library/audio_playback/transcription_tabs.dart';
@@ -59,6 +62,45 @@ class _AudioPlaybackScreenState extends State<AudioPlaybackScreen> {
     super.dispose();
   }
 
+  Future<void> deleteFile() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete this file?'),
+        content: const Text(
+          'Are you sure you want to delete this audio file? This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed ?? false) {
+      final db = await DatabaseHelper.instance.db;
+      await db.delete(
+        'audio_files',
+        where: 'id = ?',
+        whereArgs: [widget.audioFile.id],
+      );
+
+      final file = File(widget.audioFile.path);
+      // ignore: avoid_slow_async_io warning suppressed
+      if (await file.exists()) await file.delete();
+
+      if (!mounted) return;
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -72,6 +114,12 @@ class _AudioPlaybackScreenState extends State<AudioPlaybackScreen> {
               Tab(text: 'Summary'),
             ],
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: deleteFile,
+            ),
+          ],
         ),
         body: Column(
           children: [

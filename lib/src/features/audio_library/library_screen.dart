@@ -37,7 +37,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
     final fileName = result.files.single.name;
 
     final appDir = await getApplicationDocumentsDirectory();
-    // final destPath = '${appDir.path}/$fileName';
 
     final nameOnly = fileName.replaceAll(RegExp(r'\.\w+$'), '');
     final ext = fileName.split('.').last;
@@ -92,15 +91,23 @@ class _LibraryScreenState extends State<LibraryScreen> {
             return const Center(child: Text("No audio files added yet."));
           }
 
-          return ListView.builder(
-            itemCount: audioFiles.length,
-            itemBuilder: (context, index) {
-              final audio = audioFiles[index];
-              return AudioCardView(
-                audio: audio,
-                destination: "details",
-              );
+          return RefreshIndicator(
+            onRefresh: () async {
+              setState(() {
+                _audioFiles = _dao.getAll();
+              });
+              await _audioFiles;
             },
+            child: ListView.builder(
+              itemCount: audioFiles.length,
+              itemBuilder: (context, index) {
+                final audio = audioFiles[index];
+                return AudioCardView(
+                  audio: audio,
+                  destination: "details",
+                );
+              },
+            ),
           );
         },
       ),
